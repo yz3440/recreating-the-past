@@ -1,0 +1,59 @@
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Cache
+.cache/
+*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Package manager locks (uncomment preferred)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+# bun.lockb
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+.temp/
+
+# Test coverage
+coverage/
+
+# Large media files (optional - uncomment if needed)
+# *.mp4
+# *.mov
+# *.avi
+# *.zip
