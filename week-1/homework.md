@@ -16,6 +16,8 @@ Found at: <https://www.rightclicksave.com/article/an-interview-with-vera-molnar>
 
 ## Recreation
 
+![Recreation](./assets/output.png)
+
 <!-- Add screenshots, GIFs, or description of your recreation -->
 
 ## Process Notes
@@ -24,9 +26,13 @@ My goal for the entire class assignment is to use TouchDesigner exclusively to r
 
 <!-- Document your process, challenges, and discoveries -->
 
-## Code
+I model each "cell" in the grid individually as a reusable component. I used a moving noise with thresholding to control whether to draw a square line or not given a sample rate. And I generate a bunch of them in a grid layout. My composition don't look quite as nice as the original because each cell are randomly generated and there's no control of the overall harmony. I found it hard to associate different instances of the same compoenent from a single source of data (instancing in TD assumes standard 3D transformation, and other flexible ways (Replicator) to instance is quite cumbersome). Unfortunately, each cell is seeded by a different index number without knowing each other.
 
-<!-- Link to your code in the homework/ folder -->
+![Output 1 and TD Node](./assets/output_node_1.jpeg)
+
+But the square lines are modeled in 3D space, which is natural in TD. And that gives us the ability to control lots of stuff in the scene.
+
+![Output 2 and TD Node](./assets/output_node_2.jpeg)
 
 ## Reading Reflection
 
