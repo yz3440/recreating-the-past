@@ -37,3 +37,9 @@ But the square lines are modeled in 3D space, which is natural in TD. And that g
 ## Reading Reflection
 
 <!-- One sentence from the assigned reading to share in class -->
+
+> The computer draws, my eyes see, my hand draws, the computer is programmed by Jeff, the computer draws...in an endless productive cycle.
+
+> A line carves out form on a white sheet of paper, a line carves out implied visual space. A line is an abstract element which I have seen and explored. A line is grass or the edge of a leaf, a shape, a symbol. The line does not exist, it can be drawn.
+
+> The pre-camera, pre-computer Chinese artist took a life-time of understanding in order to make one meaningful ink filled brushstroke. It may take a life-time to develop a computer program to make one new communicating pen line which is meaningful for us.
