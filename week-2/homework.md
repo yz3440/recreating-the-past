@@ -37,6 +37,8 @@ See [homework/](./homework/) for the TouchDesigner project files.
 
 ## Reading Reflection
 
+> Having a train come diagonally across the screen as if right at the viewer or making use of rapid-cutting to expand uponthe time-space continuum are exhilarating cinematic experiences, but they are nowhere near as intellectually demanding as the expressive and distinct movement of colored shapes across the filmic plane.
+
 > As one begins to understand the achievements of the abstract cinema, it becomes very apparent that complex ideas of great significance can be articulated solely through movement.
 
 — Bruce Posner, _Legacy Alive: An Introduction_
