@@ -22,7 +22,7 @@ John Whitney, _Matrix III_, 1972. Whitney's film features polygonal shapes—tri
 
 ## Process Notes
 
-Continuing my commitment from [Week 1](../week-1/homework.md) to use TouchDesigner exclusively, I recreated Whitney's sine wave–driven 2D polygon shapes from *Matrix III*. The polygonal forms rotate, scale, and translate according to sinusoidal functions, mimicking the harmonic motion that defines Whitney's work.
+Continuing my commitment from [Week 1](../week-1/homework.md) to use TouchDesigner exclusively, I recreated Whitney's sine wave–driven 2D polygon shapes from _Matrix III_. The polygonal forms rotate, scale, and translate according to sinusoidal functions, mimicking the harmonic motion that defines Whitney's work.
 
 Honestly, this is a pretty rough recreation - it definitely looks like something made in the 21st century rather than capturing the analog warmth of Whitney's original. I used MIDI knobs to control the sine wave characteristics (frequency, amplitude, phase), which gave me real-time performative control over the animation. In hindsight, I probably should have used another sine wave to drive those parameters instead which would have produced a more organic, self-similar motion closer to Whitney's approach.
 
@@ -37,4 +37,6 @@ See [homework/](./homework/) for the TouchDesigner project files.
 
 ## Reading Reflection
 
-<!-- One sentence from the assigned reading to share in class -->
+> As one begins to understand the achievements of the abstract cinema, it becomes very apparent that complex ideas of great significance can be articulated solely through movement.
+
+— Bruce Posner, _Legacy Alive: An Introduction_
