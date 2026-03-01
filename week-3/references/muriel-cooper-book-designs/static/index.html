@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muriel Cooper — Book Designs</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @theme {
+      --color-mit-red: #A31F34;
+      --color-mit-red-light: #C8344D;
+      --color-surface: #FFFFFF;
+      --color-bg: #F5F5F0;
+      --color-muted: #71717A;
+      --color-border: #E4E4E7;
+      --color-ink: #18181B;
+    }
+  </style>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    body {
+      font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    .grid-catalog {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1px;
+    }
+
+    .cover-img {
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .book-card:hover .cover-img {
+      transform: scale(1.02);
+    }
+
+    .placeholder-cover {
+      aspect-ratio: 3/4;
+      display: flex;
+      align-items: flex-end;
+      padding: 1.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .placeholder-cover::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.06;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 39px,
+          currentColor 39px,
+          currentColor 40px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 39px,
+          currentColor 39px,
+          currentColor 40px
+        );
+    }
+
+    .detail-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .detail-panel {
+      background: var(--color-surface);
+      max-width: 960px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #d4d4d8; }
+
+    .fade-in {
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    input:focus, select:focus {
+      outline: 2px solid #A31F34;
+      outline-offset: -2px;
+    }
+  </style>
+</head>
+<body class="bg-bg text-ink antialiased min-h-screen">
+
+  <!-- HEADER -->
+  <header class="bg-surface border-b border-border">
+    <div class="max-w-[1440px] mx-auto">
+      <!-- Title bar -->
+      <div class="px-6 pt-8 pb-6">
+        <div class="flex items-baseline justify-between">
+          <div>
+            <h1 class="text-[2.5rem] font-bold tracking-tight leading-none">Muriel Cooper</h1>
+            <p class="text-lg text-muted mt-1 tracking-wide font-light">Book Designs</p>
+          </div>
+          <div id="stats" class="text-right text-sm text-muted font-light"></div>
+        </div>
+        <div class="h-[3px] bg-mit-red mt-6"></div>
+      </div>
+
+      <!-- Controls -->
+      <div class="px-6 pb-4 flex flex-wrap items-end gap-4">
+        <!-- Search -->
+        <div class="flex-1 min-w-[200px]">
+          <label class="block text-[10px] uppercase tracking-[0.15em] text-muted mb-1.5 font-medium">Search</label>
+          <input
+            id="search"
+            type="text"
+            placeholder="Title or author…"
+            class="w-full border border-border px-3 py-2 text-sm bg-white"
+          />
+        </div>
+
+        <!-- Year range -->
+        <div class="w-24">
+          <label class="block text-[10px] uppercase tracking-[0.15em] text-muted mb-1.5 font-medium">From</label>
+          <input
+            id="yearFrom"
+            type="number"
+            placeholder="1950"
+            class="w-full border border-border px-3 py-2 text-sm bg-white"
+          />
+        </div>
+        <div class="w-24">
+          <label class="block text-[10px] uppercase tracking-[0.15em] text-muted mb-1.5 font-medium">To</label>
+          <input
+            id="yearTo"
+            type="number"
+            placeholder="1980"
+            class="w-full border border-border px-3 py-2 text-sm bg-white"
+          />
+        </div>
+
+        <!-- Sort -->
+        <div class="w-36">
+          <label class="block text-[10px] uppercase tracking-[0.15em] text-muted mb-1.5 font-medium">Sort by</label>
+          <select id="sort" class="w-full border border-border px-3 py-2 text-sm bg-white appearance-none cursor-pointer">
+            <option value="year-asc">Year (asc)</option>
+            <option value="year-desc">Year (desc)</option>
+            <option value="title-asc">Title (A–Z)</option>
+            <option value="title-desc">Title (Z–A)</option>
+          </select>
+        </div>
+
+        <!-- View toggle -->
+        <div class="flex border border-border">
+          <button id="btnGrid" class="px-3 py-2 text-sm bg-ink text-white" onclick="setView('grid')" title="Grid view">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" fill="currentColor"/><rect x="9" y="1" width="6" height="6" fill="currentColor"/><rect x="1" y="9" width="6" height="6" fill="currentColor"/><rect x="9" y="9" width="6" height="6" fill="currentColor"/></svg>
+          </button>
+          <button id="btnList" class="px-3 py-2 text-sm bg-white text-ink" onclick="setView('list')" title="List view">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="2.5" fill="currentColor"/><rect x="1" y="6.75" width="14" height="2.5" fill="currentColor"/><rect x="1" y="11.5" width="14" height="2.5" fill="currentColor"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-[1440px] mx-auto">
+    <!-- Grid View -->
+    <div id="gridView" class="grid-catalog bg-border">
+      <!-- Cards injected here -->
+    </div>
+
+    <!-- List View -->
+    <div id="listView" class="hidden">
+      <!-- List rows injected here -->
+    </div>
+
+    <!-- Empty state -->
+    <div id="emptyState" class="hidden px-6 py-24 text-center">
+      <p class="text-2xl font-light text-muted">No books found</p>
+      <p class="text-sm text-muted mt-2">Run the scraper first: <code class="bg-border px-2 py-0.5 text-xs">uv run python -m src.agent</code></p>
+    </div>
+  </main>
+
+  <!-- DETAIL OVERLAY (hidden) -->
+  <div id="detailOverlay" class="detail-overlay hidden" onclick="closeDetail(event)">
+    <div class="detail-panel fade-in" onclick="event.stopPropagation()">
+      <div id="detailContent"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="max-w-[1440px] mx-auto px-6 py-8 mt-8 border-t border-border">
+    <div class="flex items-center justify-between text-xs text-muted">
+      <span>Muriel Cooper (1925–1994) — Design Director, MIT Press</span>
+      <span class="font-light">Database + AI Scraper</span>
+    </div>
+  </footer>
+
+  <script>
+    // ─── State ──────────────────────────────────────────────
+    let books = [];
+    let currentView = 'grid';
+
+    // Placeholder background colors (inspired by Cooper's palette)
+    const PALETTE = [
+      '#A31F34', '#1B1B1B', '#2B4570', '#4A7C59',
+      '#D4A843', '#6B4C3B', '#3D3D6B', '#8B2252',
+      '#2E5B5B', '#C15A3A', '#5B3A6B', '#1A3A1A',
+    ];
+
+    // ─── Init ───────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      loadStats();
+      loadBooks();
+
+      // Debounced search
+      let timer;
+      document.getElementById('search').addEventListener('input', () => {
+        clearTimeout(timer);
+        timer = setTimeout(loadBooks, 300);
+      });
+
+      document.getElementById('yearFrom').addEventListener('change', loadBooks);
+      document.getElementById('yearTo').addEventListener('change', loadBooks);
+      document.getElementById('sort').addEventListener('change', loadBooks);
+
+      // ESC to close detail
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeDetail();
+      });
+    });
+
+    // ─── API ────────────────────────────────────────────────
+    async function loadStats() {
+      try {
+        const res = await fetch('/api/stats');
+        const data = await res.json();
+        const el = document.getElementById('stats');
+        const yearRange = data.year_min && data.year_max
+          ? `${data.year_min}–${data.year_max}`
+          : '—';
+        el.innerHTML = `
+          <div class="text-2xl font-bold text-ink">${data.total_books}</div>
+          <div>books</div>
+          <div class="mt-1 text-xs">${data.total_covers} covers · ${yearRange}</div>
+        `;
+      } catch (e) {
+        console.error('Failed to load stats:', e);
+      }
+    }
+
+    async function loadBooks() {
+      const search = document.getElementById('search').value;
+      const yearFrom = document.getElementById('yearFrom').value || 0;
+      const yearTo = document.getElementById('yearTo').value || 9999;
+      const [sort, order] = document.getElementById('sort').value.split('-');
+
+      const params = new URLSearchParams({
+        search, year_from: yearFrom, year_to: yearTo, sort, order
+      });
+
+      try {
+        const res = await fetch(`/api/books?${params}`);
+        const data = await res.json();
+        books = data.books;
+        render();
+      } catch (e) {
+        console.error('Failed to load books:', e);
+      }
+    }
+
+    // ─── Rendering ──────────────────────────────────────────
+    function render() {
+      const gridEl = document.getElementById('gridView');
+      const listEl = document.getElementById('listView');
+      const emptyEl = document.getElementById('emptyState');
+
+      if (books.length === 0) {
+        gridEl.classList.add('hidden');
+        listEl.classList.add('hidden');
+        emptyEl.classList.remove('hidden');
+        return;
+      }
+
+      emptyEl.classList.add('hidden');
+
+      if (currentView === 'grid') {
+        gridEl.classList.remove('hidden');
+        listEl.classList.add('hidden');
+        gridEl.innerHTML = books.map((b, i) => renderCard(b, i)).join('');
+      } else {
+        gridEl.classList.add('hidden');
+        listEl.classList.remove('hidden');
+        listEl.innerHTML = books.map((b, i) => renderListRow(b, i)).join('');
+      }
+    }
+
+    function renderCard(book, index) {
+      const color = PALETTE[index % PALETTE.length];
+      const cover = book.covers && book.covers.length > 0
+        ? book.covers.find(c => c.is_primary) || book.covers[0]
+        : null;
+
+      const coverHtml = cover
+        ? `<img
+            src="/api/covers/${cover.id}/image"
+            alt="${esc(book.title)}"
+            class="cover-img w-full"
+            loading="lazy"
+          />`
+        : `<div class="placeholder-cover w-full" style="background-color: ${color}; color: ${color}">
+            <span class="relative z-10 text-white text-xl font-bold leading-tight tracking-tight"
+              >${esc(book.title)}</span>
+          </div>`;
+
+      return `
+        <article class="book-card bg-surface cursor-pointer fade-in" onclick="openDetail(${book.id})">
+          <div class="overflow-hidden">
+            ${coverHtml}
+          </div>
+          <div class="p-4">
+            <h2 class="text-sm font-semibold leading-snug line-clamp-2">${esc(book.title)}</h2>
+            ${book.author ? `<p class="text-xs text-muted mt-1 line-clamp-1">${esc(book.author)}</p>` : ''}
+            <div class="flex items-center justify-between mt-2">
+              ${book.year ? `<span class="text-xs font-medium text-mit-red">${book.year}</span>` : '<span></span>'}
+              ${book.covers && book.covers.length > 1
+                ? `<span class="text-[10px] text-muted">${book.covers.length} covers</span>`
+                : ''}
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderListRow(book, index) {
+      const cover = book.covers && book.covers.length > 0
+        ? book.covers.find(c => c.is_primary) || book.covers[0]
+        : null;
+      const color = PALETTE[index % PALETTE.length];
+
+      return `
+        <div class="flex items-stretch border-b border-border cursor-pointer hover:bg-gray-50 transition-colors"
+             onclick="openDetail(${book.id})">
+          <div class="w-16 h-20 flex-shrink-0 overflow-hidden">
+            ${cover
+              ? `<img src="/api/covers/${cover.id}/image" alt="" class="w-full h-full object-cover" loading="lazy"/>`
+              : `<div class="w-full h-full flex items-center justify-center" style="background:${color}">
+                  <span class="text-white text-[10px] font-bold px-1 text-center leading-tight">${esc(book.title).substring(0, 20)}</span>
+                </div>`
+            }
+          </div>
+          <div class="flex-1 px-4 py-3 flex items-center gap-6">
+            <div class="flex-1 min-w-0">
+              <h3 class="text-sm font-semibold truncate">${esc(book.title)}</h3>
+              ${book.author ? `<p class="text-xs text-muted truncate">${esc(book.author)}</p>` : ''}
+            </div>
+            <div class="flex-shrink-0 text-right">
+              ${book.year ? `<span class="text-sm font-medium text-mit-red">${book.year}</span>` : ''}
+              <br/>
+              <span class="text-[10px] text-muted">${esc(book.publisher || '')}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ─── Detail View ────────────────────────────────────────
+    async function openDetail(bookId) {
+      try {
+        const res = await fetch(`/api/books/${bookId}`);
+        const book = await res.json();
+
+        const covers = book.covers || [];
+        const coversHtml = covers.length > 0
+          ? `<div class="flex gap-3 overflow-x-auto pb-2">
+              ${covers.map(c => `
+                <img
+                  src="/api/covers/${c.id}/image"
+                  alt="${esc(book.title)}"
+                  class="h-80 object-contain flex-shrink-0 bg-gray-100"
+                  ${c.is_primary ? 'style="outline: 2px solid #A31F34; outline-offset: 2px;"' : ''}
+                />
+              `).join('')}
+            </div>`
+          : `<div class="h-80 bg-gray-100 flex items-center justify-center text-muted text-sm">No cover images</div>`;
+
+        const meta = [
+          ['Author', book.author],
+          ['Publisher', book.publisher],
+          ['Year', book.year],
+          ['ISBN', book.isbn],
+          ['Pages', book.pages],
+          ['Dimensions', book.dimensions],
+        ].filter(([, v]) => v);
+
+        const detailEl = document.getElementById('detailContent');
+        detailEl.innerHTML = `
+          <div class="flex flex-col md:flex-row">
+            <!-- Covers -->
+            <div class="md:w-1/2 p-6 bg-gray-50">
+              ${coversHtml}
+            </div>
+            <!-- Metadata -->
+            <div class="md:w-1/2 p-6">
+              <button onclick="closeDetail()" class="float-right text-muted hover:text-ink text-xl leading-none">&times;</button>
+              <h2 class="text-2xl font-bold leading-tight pr-8">${esc(book.title)}</h2>
+              ${book.subtitle ? `<p class="text-sm text-muted mt-1">${esc(book.subtitle)}</p>` : ''}
+
+              <div class="h-[2px] bg-mit-red mt-4 mb-4 w-12"></div>
+
+              <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
+                ${meta.map(([label, value]) => `
+                  <dt class="text-muted font-medium">${label}</dt>
+                  <dd>${esc(String(value))}</dd>
+                `).join('')}
+              </dl>
+
+              ${book.description ? `
+                <div class="mt-6">
+                  <h3 class="text-[10px] uppercase tracking-[0.15em] text-muted font-medium mb-2">Description</h3>
+                  <p class="text-sm leading-relaxed text-muted">${esc(book.description)}</p>
+                </div>
+              ` : ''}
+
+              ${book.design_notes ? `
+                <div class="mt-4">
+                  <h3 class="text-[10px] uppercase tracking-[0.15em] text-muted font-medium mb-2">Design Notes</h3>
+                  <p class="text-sm leading-relaxed text-muted">${esc(book.design_notes)}</p>
+                </div>
+              ` : ''}
+
+              ${book.source_url ? `
+                <div class="mt-4">
+                  <a href="${esc(book.source_url)}" target="_blank" rel="noopener"
+                     class="text-xs text-mit-red hover:underline">Source &rarr;</a>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        `;
+
+        document.getElementById('detailOverlay').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      } catch (e) {
+        console.error('Failed to load book detail:', e);
+      }
+    }
+
+    function closeDetail(e) {
+      if (e && e.target !== e.currentTarget) return;
+      document.getElementById('detailOverlay').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    // ─── View Toggle ────────────────────────────────────────
+    function setView(view) {
+      currentView = view;
+      const btnGrid = document.getElementById('btnGrid');
+      const btnList = document.getElementById('btnList');
+
+      if (view === 'grid') {
+        btnGrid.className = 'px-3 py-2 text-sm bg-ink text-white';
+        btnList.className = 'px-3 py-2 text-sm bg-white text-ink';
+      } else {
+        btnGrid.className = 'px-3 py-2 text-sm bg-white text-ink';
+        btnList.className = 'px-3 py-2 text-sm bg-ink text-white';
+      }
+      render();
+    }
+
+    // ─── Utils ──────────────────────────────────────────────
+    function esc(str) {
+      if (!str) return '';
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.venv/
+
+# data/books.db
+# data/covers/*
+!data/covers/.gitkeep
+
+.env
+*.log
