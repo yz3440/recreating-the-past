@@ -52,4 +52,6 @@ See [homework/](./homework/) for the TouchDesigner project files.
 
 ## Reading Reflection
 
-<!-- One sentence from the assigned reading (Bruno Munari, "The Shape of Words" / "Poems and Telegrams") to share in class -->
+> A poem only communicates if read slowly: only then does it have time to create a state of mind in which the images can form and be transformed.
+
+— Bruno Munari, _The Shape of Words_
